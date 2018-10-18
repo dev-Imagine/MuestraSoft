@@ -1,0 +1,162 @@
+﻿@{
+    softcomputacion.Models.venta oVenta = (softcomputacion.Models.venta)Session["venta"];
+    double total = 0;
+    if (oVenta.cliente==null)
+    {
+        oVenta.idCliente = 0;
+        oVenta.cliente = new softcomputacion.Models.cliente();
+        oVenta.cliente.nombre = "FINAL";
+        oVenta.cliente.apellido = "CONSUMIDOR";
+    }
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <p class="text-center fs-20"><i class="fas fa-shopping-cart fs-24"></i> PRODUCTOS</p>
+        </div>
+
+    </div>
+    <hr style="border-top: 1px solid #2872c3; margin-top:5px;" />
+    @if (oVenta != null)
+    {
+        foreach (softcomputacion.Models.detalleVenta oDetalle in oVenta.detalleVenta)
+        {
+            total = total + Convert.ToDouble(oDetalle.costoGrupal);
+            <div id="divRow">
+                <div class="row" id="div-carrito-@oDetalle.idProducto">
+                    <div class="col-12 col-md-10 col-lg-10">
+                        <div class="row">
+                            <div class="col-12 col-md-12">
+                                <p class="fs-18" style="color:#000"><strong>@oDetalle.producto.categoria.nombre @oDetalle.producto.subcategoria.nombre @oDetalle.producto.nombre</strong></p>
+                            </div>
+                            <div class="col-6 col-sm-6 col-md-6 p-l-5 p-r-5 text-center">
+                                <p class="fs-14">Cantidad: <i id="i-cant-@oDetalle.idProducto">@oDetalle.cantidad</i></p>
+                            </div>
+                            <div class="col-6 col-sm-6 col-md-6 p-l-5 p-r-5 text-right">
+                                <p class="fs-14">P/Unit: $@Math.Round(oDetalle.costoIndividual, 0)</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-md-2 col-lg-2 p-l-0 p-r-0 text-center">
+                        <p class="fs-20" style="color:#000">*$ <i id="iCostoGrupal-@oDetalle.idProducto">@Math.Round(oDetalle.costoGrupal,0)</i> </p>
+                    </div>
+                    <div class="col-12">
+                        <div class="clearfix">
+                            @if (oDetalle.producto.garantia == "" || oDetalle.producto.garantia == null)
+                            {
+                                <p class="fs-14 float-left">Gtia: N/A</p>
+                            }
+                            else
+                            {
+                                <p class="fs-14 float-left">Gtia: @oDetalle.producto.garantia</p>
+                            }
+
+                            <span class="fas fa-trash-alt float-right" style="cursor:pointer; font-size: 15px;" onclick="borrarDetalle(@oDetalle.idProducto)"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <hr id="hrDiv-@oDetalle.idProducto" />
+        }
+    }
+    <hr style="border-top: 1px solid #2872c3;" />
+    <div class="row">
+        <div class="col-12 col-sm-10 col-lg-12 col-xl-10 text-center">
+            <p class="p-t-6">CLIENTE: <strong class="text-left fs-17 pCliente" id="@oVenta.idCliente">@oVenta.cliente.apellido @oVenta.cliente.nombre &nbsp;&nbsp;&nbsp;</strong></p>
+        </div>
+        <div class="col-4 offset-4 col-sm-2 offset-sm-0 col-lg-4 offset-lg-4 col-xl-2 offset-xl-0">
+            <div class="btn-group w-full" role="group">
+                <button type="button" class="btn btn-outline-primary" style="width:100%" onclick="_PopUpBuscarCliente()"><i class="fas fa-share"></i></button>
+                <button type="button" class="btn btn-outline-danger" style="width:100%" onclick="BorrarCliente()"><i class="fas fa-times-circle"></i></button>
+            </div>
+        </div>
+        
+        
+
+
+    </div>
+    <hr style="border-top: 1px solid #2872c3;" />
+    <div class="row ">
+        <div class="col-12">
+            <p id="" class="text-right fs-20" style="color:#000">Total:$ <i id="iTotal">@Math.Round(total,0)</i></p>
+        </div>
+    </div>
+    <hr style="border-top: 1px solid #2872c3;" />
+    <div class="row text-center">
+        <div class="col-12 col-sm-12">
+            <form method="post" action="@Url.Action("GenerarVenta", "Venta")">
+                <button id="btnGenerarVenta" type="submit" class="btn btn-dark w-100">Generar venta</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div id="div-popup-BuscarCliente"></div>
+
+    <script>
+
+        function borrarDetalle(idProducto) {
+            var url = "@Url.Action("borrarDetalle", "Venta")";
+            var data = { idProducto: idProducto };
+            $.post(url, data).done(function (data) {
+                if (data == "true") {
+                    var stockActual = $('#iSpan-' + idProducto).text();
+                    var stockDescontar = $('#i-cant-' + idProducto).text();
+                    var stockEstimado = parseInt(stockActual) + parseInt(stockDescontar);
+                    var precioDescontar = parseFloat($('#iCostoGrupal-' + idProducto).text());
+                    var precioTotal = parseFloat($('#iTotal').text());
+                    var decimales = $('#iCostoGrupal-' + idProducto).text().split(',');
+                    $('#iSpan-' + idProducto).text(stockEstimado);
+                    $('#div-carrito-' + idProducto).remove();
+                    $('#hrDiv-' + idProducto).remove();
+                    $('#iTotal').text(parseFloat(precioTotal - precioDescontar));
+                    if (stockEstimado == 0) {
+                        $('#iSpan-' + idProducto).css({ color: "red" });
+                    } else {
+                        $('#iSpan-' + idProducto).css({ color: "" });
+                    }
+                } else
+                {
+                    swal("Ocurrió un error", "Se produjo un error al intentar agregar un producto al carrito", "error");
+                }
+            });
+        }
+
+        function _PopUpBuscarCliente() {
+
+            var url = "@Url.Action("_PopUpBuscarCliente", "Cliente")";
+            var data = {};
+            $.post(url, data).done(function (data) {
+                if (data.length > 0) {
+                    $('#div-popup-BuscarCliente').html(data);
+                    $('#popupBuscarCliente').modal('show');
+                }
+            });
+        }
+
+        function SelecionarCliente(idCliente, apellido, nombre) {
+            var url = "@Url.Action("SeleccionarClienteVenta", "Venta")";
+            var data = { 'oCliente.idCliente': idCliente, 'oCliente.apellido': apellido, 'oCliente.nombre': nombre };
+            $.post(url, data).done(function (data) {
+                $('.pCliente').removeAttr('id');
+                $('.pCliente').attr('id', data.idCliente);
+                $('#' + data.idCliente).html(data.apellido + " " + data.nombre + " &nbsp;&nbsp;&nbsp;");
+                $('#popupBuscarCliente').modal('toggle');
+            });
+
+        }
+
+        function BorrarCliente() {
+            var url = "@Url.Action("SeleccionarClienteVenta", "Venta")";
+            var data = { 'oCliente.idCliente': 0, 'oCliente.apellido': "", 'oCliente.nombre': "" };
+            $.post(url, data).done(function (data) {
+                $('.pCliente').removeAttr('id');
+                $('.pCliente').attr('id', data.idCliente);
+                $('#' + data.idCliente).html(data.apellido + " " + data.nombre + " &nbsp;&nbsp;&nbsp;");
+            });
+
+        }
+
+    </script>

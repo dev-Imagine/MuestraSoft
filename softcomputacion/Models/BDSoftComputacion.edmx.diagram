@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="0e521d45664b4b0499ac9977d4acf419" Name="Diagram1">
+        <EntityTypeShape EntityType="BDSoftComputacionModel.categoria" Width="1.5" PointX="0.75" PointY="6.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="BDSoftComputacionModel.cliente" Width="1.5" PointX="3" PointY="5.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="BDSoftComputacionModel.detallePago" Width="1.5" PointX="7.5" PointY="1.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="BDSoftComputacionModel.detalleVenta" Width="1.5" PointX="7.5" PointY="9.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="BDSoftComputacionModel.estado" Width="1.5" PointX="3" PointY="9.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="BDSoftComputacionModel.historialStock" Width="1.5" PointX="7.5" PointY="12.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="BDSoftComputacionModel.metodoPago" Width="1.5" PointX="5.25" PointY="16.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="BDSoftComputacionModel.producto" Width="1.5" PointX="5.25" PointY="7.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="BDSoftComputacionModel.proveedor" Width="1.5" PointX="8.25" PointY="5.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="BDSoftComputacionModel.proveedorXproducto" Width="1.5" PointX="10.5" PointY="9.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="BDSoftComputacionModel.reparacion" Width="1.5" PointX="9.75" PointY="1.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="BDSoftComputacionModel.subcategoria" Width="1.5" PointX="3" PointY="12.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="BDSoftComputacionModel.tipoUsuario" Width="1.5" PointX="0.75" PointY="2.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="BDSoftComputacionModel.usuario" Width="1.5" PointX="3" PointY="2.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="BDSoftComputacionModel.valorUSD" Width="1.5" PointX="9.75" PointY="3.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="BDSoftComputacionModel.venta" Width="1.5" PointX="5.25" PointY="0.75" IsExpanded="true" />
+        <AssociationConnector Association="BDSoftComputacionModel.FK_producto_categoria" ManuallyRouted="false" />
+        <AssociationConnector Association="BDSoftComputacionModel.FK_subcategoria_categoria" ManuallyRouted="false" />
+        <AssociationConnector Association="BDSoftComputacionModel.FK_venta_cliente" ManuallyRouted="false" />
+        <AssociationConnector Association="BDSoftComputacionModel.FK_detallePago_metodoPago" ManuallyRouted="false" />
+        <AssociationConnector Association="BDSoftComputacionModel.FK_detallePago_venta" ManuallyRouted="false" />
+        <AssociationConnector Association="BDSoftComputacionModel.FK_detalleVenta_producto" ManuallyRouted="false" />
+        <AssociationConnector Association="BDSoftComputacionModel.FK_detalleVenta_venta" ManuallyRouted="false" />
+        <AssociationConnector Association="BDSoftComputacionModel.FK_producto_estado" ManuallyRouted="false" />
+        <AssociationConnector Association="BDSoftComputacionModel.FK_venta_estado" ManuallyRouted="false" />
+        <AssociationConnector Association="BDSoftComputacionModel.FK_hostorialStock_producto" ManuallyRouted="false" />
+        <AssociationConnector Association="BDSoftComputacionModel.FK_producto_subcategoria" ManuallyRouted="false" />
+        <AssociationConnector Association="BDSoftComputacionModel.FK_proveedorXproducto_producto" ManuallyRouted="false" />
+        <AssociationConnector Association="BDSoftComputacionModel.FK_proveedorXproducto_proveedor" ManuallyRouted="false" />
+        <AssociationConnector Association="BDSoftComputacionModel.FK_usuario_tipoUsuario" ManuallyRouted="false" />
+        <AssociationConnector Association="BDSoftComputacionModel.FK_venta_usuario" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
